@@ -30,4 +30,4 @@ if [[ $# != 0 ]] ; then
     Usage
 fi
 
-../bin/run-squicktest.sh -n ${NS_NAME} -t $(cat ./quicktester.token) -s axonserver-tls
+../bin/run-squicktest.sh -n ${NS_NAME} -t $(cat ./axonserver.token) -s axonserver-tls
