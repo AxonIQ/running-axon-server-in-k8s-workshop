@@ -101,7 +101,7 @@ kubectl run axonserver-quicktest --image=${IMAGE} -n ${NS_NAME} --attach stdout 
             {"name": "AXON_AXONSERVER_SERVERS", "value": "'${SERVERS}'"},
             {"name": "MS_DELAY", "value": "1000"},
             {"name": "SPRING_PROFILES_ACTIVE", "value": "axonserver"},
-            {"name": "AXON_AXONSERVER_SSL-ENABLED", "value": "true"},
+            {"name": "AXON_AXONSERVER_SSL-ENABLED", "value": "false"},
             {"name": "AXON_AXONSERVER_TOKEN", "value": "'${TOKEN}'"}
         ]
     }]

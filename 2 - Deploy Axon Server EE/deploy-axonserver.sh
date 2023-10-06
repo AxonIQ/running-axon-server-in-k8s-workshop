@@ -57,7 +57,7 @@ fi
 BINDIR=../bin
 
 if [[ "${IMAGE}" == "" ]] ; then
-    IMAGE=axoniq/axonserver-enterprise:${VERSION}-jdk-11-dev-nonroot
+    IMAGE=axoniq/axonserver:${VERSION}-jdk-11-dev-nonroot
 fi
 
 STS_NAME=$1
