@@ -43,6 +43,9 @@ The nodes will be named "`axonserver-1`", "`axonserver-2`", and "`axonserver-3`"
 | axonserver-2 | axonserver-2-0 | axonserver-2 | axonserver-2.running-ee.svc.cluster.local |
 | axonserver-3 | axonserver-3-0 | axonserver-3 | axonserver-3.running-ee.svc.cluster.local |
 
+## Grab a License file
+You can obtain a 30 days free license file from https://www.axoniq.io/products/axon-server
+This need to be saved in this folder, on a file named `axoniq.license`
 
 ## How to deploy
 
@@ -162,10 +165,25 @@ service/axonserver-3 created
 $
 ```
 
-To test your deployment, you can use the `run_squicktest.sh` script:
+To test your deployment, we will run a small application called `quicktest` that will connect to your cluster.
+
+We need first to generate an application token for our quicktest:
 
 ```
-$ ./run-squicktest.sh
+
+./run-cli.sh "register-application -a quicktest -r USE_CONTEXT@default  -d quicktest"
+If you don't see a command prompt, try pressing enter.
+AccessToken is: e2125d20-c0f0-43fa-aa02-b924df99d1f2
+
+```
+
+We need to grab the generated token, in my case `e2125d20-c0f0-43fa-aa02-b924df99d1f2` and save it to `quicktester.token` file
+
+`echo "e2125d20-c0f0-43fa-aa02-b924df99d1f2" > quicktester.token`
+
+You can now run ./run-squicktest.sh script:
+```
+$ ./run-quicktest.sh
 If you don't see a command prompt, try pressing enter.
 2022-09-15 07:52:49.252  INFO 1 --- [           main] i.a.t.q.c.QuickAxonServerConfiguration   : Setting up routing policy on a AxonServerCommandBus.
 2022-09-15 07:52:49.643  INFO 1 --- [           main] i.a.a.c.impl.AxonServerManagedChannel    : Requesting connection details from axonserver-1.running-ee.svc.cluster.local:8124
@@ -178,6 +196,19 @@ If you don't see a command prompt, try pressing enter.
 pod "axonserver-quicktest" deleted
 $
 ```
+
+To verify this we can connect to our AxonServer Dashboard.
+But before doing it, we need to create a user that has access to our UI.
+
+`./run-cli.sh "register-user -u admin -p test -r ADMIN,READ_EVENTS@default"`
+
+After the pod is completed, we can port-forward into one of our instance
+
+`kubectl port-forward axonserver-1-0 8024:8024`
+
+We will now open a browser windows to `https://localhost:8024`, log in with our `admin` user that we just created with password `test` and navigate to the `SEARCH` tab from the menu.
+Performing a search on the `default` context selecting from the `Query time window` dropdown the appropriate time, we will see the events saved into our event store.
+
 ## Cleaning up
 
 The script "`cleanup.sh`" will remove all files generated from the tamplates. To delete the cluster you can just run "`kubectl delete ns running-ee`".
